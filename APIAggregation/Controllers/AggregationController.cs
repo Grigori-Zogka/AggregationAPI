@@ -15,7 +15,7 @@ namespace APIAggregation.Controllers
             _baseService = baseService;
         }
 
-        [HttpGet("{Aggegation}")]
+        [HttpGet("{Aggegation}")] 
         public async Task<IActionResult> GetNewsAndWeather(string city, string spotifyQuery,string newsCategory = "general")
         {
             var result = await _baseService.GetNewsAndWeatherAsync(city, spotifyQuery, newsCategory);
