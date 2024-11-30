@@ -19,13 +19,28 @@ namespace APIAggregation.Controllers
         [HttpGet] 
         public async Task<IActionResult> GetNewsAndWeather(string city, string spotifyQuery,string newsCategory = "general")
         {
-            var result = await _baseService.GetDataAsync(city, spotifyQuery, newsCategory);
-            if (result == null)
+
+            if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(spotifyQuery) || string.IsNullOrEmpty(newsCategory))
             {
-                return NotFound("Unable to fetch aggregation data.");
+                return BadRequest("Invalid parameters.");
             }
 
-            return Ok(result);
+            try
+            {
+                var result = await _baseService.GetDataAsync(city, spotifyQuery, newsCategory);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+               
+            }
+
         }
     }
 }

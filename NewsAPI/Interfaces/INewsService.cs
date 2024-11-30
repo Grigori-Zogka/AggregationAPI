@@ -4,6 +4,6 @@ namespace NewsAPI.Interfaces
 {
     public interface INewsService
     {
-        Task<IEnumerable<NewsResponse>> GetTopHeadlinesAsync(string category);
+        Task<IEnumerable<NewsApiResponse>> GetTopHeadlinesAsync(string category);
     }
 }

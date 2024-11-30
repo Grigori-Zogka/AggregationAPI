@@ -5,8 +5,8 @@ namespace APIAggregation.Data
 {
     public class AggregationData
     {
-        //[BsonId]
-        //public Guid Id { get; set; }
+        [BsonId]
+        public string Id { get; set; } 
         public string ApiType { get; set; }
 
         [BsonElement("RawData")]

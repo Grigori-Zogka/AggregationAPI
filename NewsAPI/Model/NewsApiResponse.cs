@@ -2,8 +2,15 @@
 {
     public class NewsApiResponse
     {
-        public string Status { get; set; }         // "ok", "error", etc.
-        public int TotalResults { get; set; }     // Total number of articles available
-        public IEnumerable<NewsResponse> Articles { get; set; } // List of news articles
+        public string SourceId { get; set; }
+        public string SourceName { get; set; }
+        public string Author { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Url { get; set; }
+        public string UrlToImage { get; set; }
+        public DateTime PublishedAt { get; set; }
+        public string Content { get; set; }
     }
+  
 }

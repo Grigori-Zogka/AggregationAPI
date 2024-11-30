@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using APIAggregation.Interfaces;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace APIAggregation.Data

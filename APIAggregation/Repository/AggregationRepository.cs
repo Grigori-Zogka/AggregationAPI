@@ -32,7 +32,7 @@ namespace APIAggregation.Repository
                 }
 
                 var aggregationData = new AggregationData
-                {
+                {   Id =  $"Data_{type}-{DateTime.UtcNow}",
                     ApiType = type,
                     RawData = (BsonDocument)bsonData,
                     Timestamp = DateTime.UtcNow
