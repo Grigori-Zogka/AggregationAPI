@@ -1,5 +1,6 @@
 
 using APIAggregation.Data;
+using APIAggregation.Interfaces;
 using APIAggregation.Repository;
 using APIAggregation.Services;
 using NewsAPI.Interfaces;
@@ -42,7 +43,8 @@ namespace APIAggregation
             builder.Services.AddScoped<IOpenWeatherService, OpenWeatherService>();
             builder.Services.AddScoped<SpotifyAuthService>();
             builder.Services.AddScoped<SpotifyApiService>();
-            builder.Services.AddScoped<BaseService>();
+
+            builder.Services.AddScoped<IBaseService, BaseService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

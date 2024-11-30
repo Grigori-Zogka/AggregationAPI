@@ -1,13 +1,13 @@
-﻿using APIAggregation.Repository;
+﻿using APIAggregation.Interfaces;
+using APIAggregation.Repository;
 using NewsAPI.Interfaces;
 using Newtonsoft.Json;
 using SpotifyAPI.Services;
-using System.Runtime.CompilerServices;
 using WeatherAPI.Interfaces;
 
 namespace APIAggregation.Services
 {
-    public class BaseService
+    public class BaseService : IBaseService
     {
         private readonly INewsService _newsService;
         private readonly IOpenWeatherService _weatherService;
@@ -21,7 +21,7 @@ namespace APIAggregation.Services
             _aggregationRepository = aggregationRepository;
         }
 
-        public async Task<object> GetNewsAndWeatherAsync(string city, string query, string category = "general")
+        public async Task<object> GetDataAsync(string city, string query, string category = "general")
         {
             var newsResponse = await _newsService.GetTopHeadlinesAsync(category);
             var weatherData = await _weatherService.GetWeatherAsync(city);
@@ -47,7 +47,6 @@ namespace APIAggregation.Services
             {
                 Console.WriteLine($"Error saving aggregation data: {ex.Message}");
                 throw;
-
             }
 
 
