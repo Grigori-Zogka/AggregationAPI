@@ -13,12 +13,14 @@ namespace APIAggregation.Services
         private readonly IOpenWeatherService _weatherService;
         private readonly SpotifyApiService _spotifyApiService;
         private readonly AggregationRepository _aggregationRepository;
-        public BaseService(INewsService newsService, IOpenWeatherService weatherService, SpotifyApiService spotifyApiService, AggregationRepository aggregationRepository)
+        private readonly ILogger<BaseService> _logger;
+        public BaseService(INewsService newsService, IOpenWeatherService weatherService, SpotifyApiService spotifyApiService, AggregationRepository aggregationRepository, ILogger<BaseService> logger)
         {
             _newsService = newsService;
             _weatherService = weatherService;
             _spotifyApiService = spotifyApiService;
             _aggregationRepository = aggregationRepository;
+            _logger = logger;
         }
 
         public async Task<object> GetDataAsync(string city, string query, string category = "general")
@@ -29,6 +31,7 @@ namespace APIAggregation.Services
 
             if (newsResponse == null || weatherData == null ||spotifyData== null)
             {
+                _logger.LogError("Parameter incorrect or missing");
                 return null;
             }
 
@@ -45,8 +48,7 @@ namespace APIAggregation.Services
             }
             catch (Exception ex) 
             {
-                Console.WriteLine($"Error saving aggregation data: {ex.Message}");
-                throw;
+                _logger.LogError($"Error saving aggregation data: {ex.Message}");
             }
 
 
@@ -56,6 +58,7 @@ namespace APIAggregation.Services
                 Weather = weatherData,
                 Track = spotifyData
             };
+            
         }
     }
 }

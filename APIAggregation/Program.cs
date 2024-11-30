@@ -5,6 +5,7 @@ using APIAggregation.Repository;
 using APIAggregation.Services;
 using NewsAPI.Interfaces;
 using NewsAPI.Services;
+using Serilog;
 using SpotifyAPI.Services;
 using WeatherAPI.Interfaces;
 using WeatherAPI.Services;
@@ -17,7 +18,13 @@ namespace APIAggregation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-           
+            // Configure Serilog from appsettings.json
+            builder.Host.UseSerilog((context, services, configuration) =>
+                configuration
+                    .ReadFrom.Configuration(context.Configuration)
+                    .ReadFrom.Services(services));
+
+
             builder.Services.Configure<MongoDBSettings>(
                 builder.Configuration.GetSection("MongoDBSettings"));
 

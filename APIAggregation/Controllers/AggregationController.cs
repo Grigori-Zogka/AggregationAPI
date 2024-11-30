@@ -1,4 +1,5 @@
 ﻿using APIAggregation.Interfaces;
+using APIAggregation.Repository;
 using APIAggregation.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,18 +11,23 @@ namespace APIAggregation.Controllers
     public class AggregationController : ControllerBase
     {
         private readonly IBaseService _baseService;
+        private readonly ILogger<AggregationRepository> _logger;
 
-        public AggregationController(IBaseService baseService)
+        public AggregationController(IBaseService baseService, ILogger<AggregationRepository> logger)
         {
             _baseService = baseService;
+            _logger = logger;
         }
 
         [HttpGet] 
         public async Task<IActionResult> GetNewsAndWeather(string city, string spotifyQuery,string newsCategory = "general")
         {
+            _logger.LogInformation($"New Entry. City: {city} , Spotify Query: {spotifyQuery}, NewsCategory: {newsCategory}  Time: {DateTime.UtcNow}");
+
 
             if (string.IsNullOrEmpty(city) || string.IsNullOrEmpty(spotifyQuery) || string.IsNullOrEmpty(newsCategory))
             {
+                _logger.LogError($"Invalid parameters. City: {city} , Spotify Query: {spotifyQuery}, NewsCategory: {newsCategory}");
                 return BadRequest("Invalid parameters.");
             }
 
@@ -30,6 +36,7 @@ namespace APIAggregation.Controllers
                 var result = await _baseService.GetDataAsync(city, spotifyQuery, newsCategory);
                 if (result == null)
                 {
+                    _logger.LogError($"there are no result data");
                     return NotFound();
                 }
 
@@ -37,7 +44,8 @@ namespace APIAggregation.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error: " + ex.Message);
+                _logger.LogError($"Internal server error:{ ex.Message}");
+                return StatusCode(500, "Internal server error:{ ex.Message}");
                
             }
 

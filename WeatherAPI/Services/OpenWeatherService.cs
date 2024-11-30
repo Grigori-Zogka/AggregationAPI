@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System.Net.Http;
-using WeatherAPI.Data;
 using WeatherAPI.Interfaces;
 using WeatherAPI.Model;
 
@@ -10,7 +8,6 @@ namespace WeatherAPI.Services
     public class OpenWeatherService : IOpenWeatherService
     {
         private readonly HttpClient _httpClient;
-        //private readonly WeatherRepository _weatherRepository;
         private readonly string _apiKey;
         public OpenWeatherService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
@@ -27,7 +24,6 @@ namespace WeatherAPI.Services
                 response.EnsureSuccessStatusCode();
 
                 var content = await response.Content.ReadAsStringAsync();
-                //await _weatherRepository.AddWeatherDataAsync(city, content);
 
                 return JsonConvert.DeserializeObject<WeatherResponse>(content);
 

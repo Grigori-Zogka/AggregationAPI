@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using WeatherAPI.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using WeatherAPI.Interfaces;
-using WeatherAPI.Repository;
 
 namespace WeatherAPI.Controllers
 {
@@ -15,20 +12,30 @@ namespace WeatherAPI.Controllers
         public WeatherController(IOpenWeatherService weatherService)
         {
             _weatherService = weatherService;
-            
         }
 
         [HttpGet("{city}")]
         public async Task<IActionResult> GetWeather(string city)
         {
-            
-            var weatherData = await _weatherService.GetWeatherAsync(city);
-            
-            if (weatherData == null)
+            if (string.IsNullOrEmpty(city))
             {
-                return NotFound("Weather data not found.");
+                return BadRequest("Invalid parameters.");
             }
-            return Ok(weatherData);
+
+            try
+            {
+                var weatherData = await _weatherService.GetWeatherAsync(city);
+            
+                if (weatherData == null)
+                {
+                    return NotFound();
+                }
+                return Ok(weatherData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
     }

@@ -19,27 +19,26 @@ namespace SpotifyAPI.Controllers
         [HttpGet("search")]
         public async Task<IActionResult> SearchTracks(string query)
         {
+            if (string.IsNullOrEmpty(query))
+            {
+                return BadRequest("Invalid parameters.");
+            }
+
             try
             {
-                if (string.IsNullOrEmpty(query))
-                {
-                    return BadRequest("Query parameter cannot be null or empty.");
-                }
-
                 var result = await _spotifyService.SearchTracksAsync(query);
 
                 if (result == null || result.Count == 0)
                 {
-                    return NotFound("No tracks found for the given query.");
+                    return NotFound();
 
                 }
                 return Ok(result);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
     }

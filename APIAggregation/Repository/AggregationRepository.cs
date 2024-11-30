@@ -8,9 +8,11 @@ namespace APIAggregation.Repository
     public class AggregationRepository
     {
         private readonly IMongoCollection<AggregationData> _aggrigationCollection;
-        public AggregationRepository(MongoDBContext context)
+        private readonly ILogger<AggregationRepository> _logger;
+        public AggregationRepository(MongoDBContext context, ILogger<AggregationRepository> logger)
         {
             _aggrigationCollection = context.WeatherDataCollection;
+            _logger = logger;
         }
 
         public async Task SaveDataAsync(string type,string rawJson)
@@ -18,7 +20,7 @@ namespace APIAggregation.Repository
             try
             {
                 BsonValue bsonData;
-
+                string id = $"Data_{type}-{DateTime.UtcNow}";
                 // Determine if the input JSON is an array or an object
                 if (rawJson.TrimStart().StartsWith("["))
                 {
@@ -32,18 +34,19 @@ namespace APIAggregation.Repository
                 }
 
                 var aggregationData = new AggregationData
-                {   Id =  $"Data_{type}-{DateTime.UtcNow}",
+                {   Id =  id,
                     ApiType = type,
                     RawData = (BsonDocument)bsonData,
                     Timestamp = DateTime.UtcNow
                 };
 
+                _logger.LogInformation($"Entry Saved : {id}");
                 await _aggrigationCollection.InsertOneAsync(aggregationData);
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error saving data: {ex.Message}");
+                _logger.LogError($"Error saving aggregation data: {ex.Message}");
                 throw;
             }
           

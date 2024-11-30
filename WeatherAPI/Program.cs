@@ -1,8 +1,6 @@
 
 
-using WeatherAPI.Data;
 using WeatherAPI.Interfaces;
-using WeatherAPI.Repository;
 using WeatherAPI.Services;
 
 namespace WeatherAPI
@@ -12,15 +10,6 @@ namespace WeatherAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            // Configure MongoDB settings
-            //builder.Services.Configure<MongoDBSettings>(
-            //    builder.Configuration.GetSection("MongoDBSettings"));
-
-            //// Register MongoDB context
-            //builder.Services.AddSingleton<MongoDBContext>();
-            //builder.Services.AddScoped<WeatherRepository>();
 
             builder.Services.AddHttpClient("OpenWeatherMap", client =>
             {
